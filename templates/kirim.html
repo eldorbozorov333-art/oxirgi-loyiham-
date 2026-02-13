@@ -1,0 +1,75 @@
+{% extends "layout/base.html" %}
+{% block title %}Kirim{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="page-title">
+    <div>
+      <h4 class="mb-1">Kirim qilish</h4>
+      <div class="muted">Mahsulot, miqdor va kirim narxini kiriting</div>
+    </div>
+  </div>
+
+  {# umumiy (non-field) xatolar #}
+  {% if form.non_field_errors %}
+    <div class="alert alert-danger mb-3">{{ form.non_field_errors }}</div>
+  {% endif %}
+
+  <form method="post" class="row g-3">
+    {% csrf_token %}
+
+    <div class="col-md-6">
+      <label class="form-label">Mahsulot turi</label>
+      {{ form.product }}
+      {% if form.product.errors %}
+        <div class="text-danger small mt-1">{{ form.product.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Miqdor</label>
+      {{ form.quantity }}
+      {% if form.quantity.errors %}
+        <div class="text-danger small mt-1">{{ form.quantity.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">Kirim narxi (1 dona)</label>
+      {{ form.price }}
+      {% if form.price.errors %}
+        <div class="text-danger small mt-1">{{ form.price.errors }}</div>
+      {% endif %}
+    </div>
+
+    <div class="col-md-6">
+      <label class="form-label">Umumiy kirim summasi (avto)</label>
+      <input type="text" id="total" class="form-control" readonly value="0">
+      <div class="muted mt-1">Umumiy summa = miqdor × narx</div>
+    </div>
+
+    <div class="col-12 d-flex gap-2">
+      <button class="btn btn-primary" type="submit">
+        <i class="bi bi-check2-circle"></i> Saqlash
+      </button>
+      <a class="btn btn-outline-secondary" href="{% url 'home' %}">Orqaga</a>
+    </div>
+  </form>
+</div>
+
+<script>
+  function calcTotal(){
+    const qtyEl = document.getElementById('id_quantity');
+    const priceEl = document.getElementById('id_price');
+
+    const qty = parseFloat(qtyEl?.value || 0);
+    const price = parseFloat(priceEl?.value || 0);
+
+    const total = qty * price;
+    document.getElementById('total').value = total ? total.toFixed(2) : "0";
+  }
+
+  document.getElementById('id_quantity')?.addEventListener('input', calcTotal);
+  document.getElementById('id_price')?.addEventListener('input', calcTotal);
+</script>
+{% endblock %} 

@@ -1,0 +1,116 @@
+{% extends "layout/base.html" %}
+{% block title %}Hisobot{% endblock %}
+
+{% block content %}
+<div class="page-title">
+  <div>
+    <h4 class="mb-1">Hisobot</h4>
+    <div class="muted">Bugungi va umumiy kirim/chiqim natijalari</div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat green">
+    <div class="muted text-white-50">Bugungi Kirim</div>
+    <div class="stat-value">{{ bugungi_kirim|default:"0" }}</div>
+  </div>
+  <div class="stat red">
+    <div class="muted text-white-50">Bugungi Chiqim</div>
+    <div class="stat-value">{{ bugungi_chiqim|default:"0" }}</div>
+  </div>
+  <div class="stat blue">
+    <div class="muted text-white-50">Umumiy Kirim</div>
+    <div class="stat-value">{{ jami_kirim|default:"0" }}</div>
+  </div>
+  <div class="stat purple">
+    <div class="muted text-white-50">Foyda (Umumiy)</div>
+    <div class="stat-value">{{ foyda|default:"0" }}</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">Bugungi Kirimlar ({{ today }})</div>
+    <div class="table-wrap">
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            <th>Sana</th>
+            <th>Mahsulot</th>
+            <th>Miqdor</th>
+            <th>Narx</th>
+            <th>Summa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in bugungi_kirimlar %}
+          <tr>
+            <td>{{ i.created_at|date:"d.m.Y H:i" }}</td>
+            <td>{{ i.product.name }}</td>
+            <td>{{ i.quantity }}</td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.total_amount }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center muted">Bugun kirim yo'q</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Bugungi Chiqimlar ({{ today }})</div>
+    <div class="table-wrap">
+      <table class="table table-sm table-striped">
+        <thead>
+          <tr>
+            <th>Sana</th>
+            <th>Mahsulot</th>
+            <th>Miqdor</th>
+            <th>Narx</th>
+            <th>Summa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in bugungi_chiqimlar %}
+          <tr>
+            <td>{{ e.created_at|date:"d.m.Y H:i" }}</td>
+            <td>{{ e.product.name }}</td>
+            <td>{{ e.quantity }}</td>
+            <td>{{ e.price }}</td>
+            <td>{{ e.total_amount }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="5" class="text-center muted">Bugun chiqim yo'q</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="card mt-3">
+  <div class="card-title">Umumiy natijalar</div>
+  <div class="row g-2">
+    <div class="col-md-4">
+      <div class="p-3 rounded border">
+        <div class="muted">Umumiy Kirim</div>
+        <div class="fw-bold fs-5">{{ jami_kirim }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded border">
+        <div class="muted">Umumiy Chiqim</div>
+        <div class="fw-bold fs-5">{{ jami_chiqim }}</div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="p-3 rounded border">
+        <div class="muted">Foyda</div>
+        <div class="fw-bold fs-5">{{ foyda }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

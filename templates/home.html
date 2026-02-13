@@ -1,0 +1,109 @@
+{% extends "layout/base.html" %}
+{% block title %}Asosiy Panel{% endblock %}
+
+{% block content %}
+<div class="page-title">
+  <div>
+    <h4 class="mb-1">📊 Dashboard</h4>
+    <div class="muted">Umumiy kirim/chiqim, ombor holati va mahsulotlar ro'yxati</div>
+  </div>
+</div>
+
+<div class="stats">
+  <div class="stat green">
+    <div class="muted text-white-50">Jami Kirim</div>
+    <div class="stat-value">{{ jami_kirim|default:"0" }}</div>
+  </div>
+
+  <div class="stat red">
+    <div class="muted text-white-50">Jami Chiqim</div>
+    <div class="stat-value">{{ jami_chiqim|default:"0" }}</div>
+  </div>
+
+  <div class="stat blue">
+    <div class="muted text-white-50">Mahsulotlar soni</div>
+    <div class="stat-value">{{ mahsulot_soni|default:"0" }}</div>
+  </div>
+
+  <div class="stat purple">
+    <div class="muted text-white-50">Tugagan mahsulotlar</div>
+    <div class="stat-value">{{ tugagan_soni|default:"0" }}</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-title">❌ Tugagan mahsulotlar</div>
+    <ul class="list">
+      {% for m in tugaganlar %}
+        <li class="li">
+          <span>{{ m.name }}</span>
+          <span class="badge danger">0</span>
+        </li>
+      {% empty %}
+        <li class="muted">Yo‘q ✅</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">⚠️ Kam qolganlar (limitdan past)</div>
+    <ul class="list">
+      {% for m in kam_qolganlar %}
+        <li class="li">
+          <span>{{ m.name }}</span>
+          <span class="badge warn">{{ m.quantity }}</span>
+        </li>
+      {% empty %}
+        <li class="muted">Yo'q ✅</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+<div class="card">
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <div class="card-title mb-0">📋 Mahsulotlar</div>
+    <div class="muted">Jadvalni pastga scroll qilib ko'rishingiz mumkin</div>
+  </div>
+
+  <div class="table-wrap">
+    <table class="table table-bordered table-hover align-middle">
+      <thead class="table-light">
+        <tr>
+          <th style="width:70px;">ID</th>
+          <th>Nomi</th>
+          <th>Kategoriya</th>
+          <th style="width:150px;">Narx</th>
+          <th style="width:120px;">Miqdor</th>
+          <th style="width:140px;">Holat</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>{{ p.id }}</td>
+          <td class="fw-semibold">{{ p.name }}</td>
+          <td>{{ p.category }}</td>
+          <td>{{ p.price }}</td>
+          <td>{{ p.quantity }}</td>
+          <td>
+            {% if p.quantity == 0 %}
+              <span class="badge danger">Tugagan</span>
+            {% elif p.quantity <= p.min_limit %}
+              <span class="badge warn">Kam qoldi</span>
+            {% else %}
+              <span class="badge ok">Yaxshi</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="6" class="text-center muted">Mahsulotlar yo'q</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %} 
